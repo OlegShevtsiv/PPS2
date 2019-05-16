@@ -41,7 +41,28 @@
                 <div class="h4 pr-3">Genre: @Model.Genre</div>
             </div>
             <div class="d-flex">
-                <div class="h4 pr-3">Rating: @Model.Rate / 5</div>
+                @if (Model.Rate <= 1)
+                {
+                    <div class="h4 pr-3">Rating: <b style="color:firebrick">@Model.Rate</b> / 5</div>
+                }
+                else if (Model.Rate <= 2)
+                {
+                    <div class="h4 pr-3">Rating: <b style="color:darkorange">@Model.Rate</b> / 5</div>
+                }
+                else if (Model.Rate <= 3)
+                {
+                    <div class="h4 pr-3">Rating: <b style="color:gold">@Model.Rate</b> / 5</div>
+                }
+                else if (Model.Rate <= 4)
+                {
+                    <div class="h4 pr-3">Rating: <b style="color:chartreuse">@Model.Rate</b> / 5</div>
+                }
+                else
+                {
+                    <div class="h4 pr-3">Rating: <b style="color:cyan">@Model.Rate</b> / 5</div>
+                }
+
+
             </div>
             <div class="d-flex">
                 <div class="h4 pr-3">Number of votes: @Model.RatesAmount</div>

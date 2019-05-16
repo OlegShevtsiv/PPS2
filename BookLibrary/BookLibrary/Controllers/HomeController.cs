@@ -29,7 +29,7 @@ namespace BookLibrary.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_bookService.GetAll().ToList());
+            return View(_bookService.GetAll().ToList().OrderByDescending(b => b.Rate));
         }
       
         [HttpPost]

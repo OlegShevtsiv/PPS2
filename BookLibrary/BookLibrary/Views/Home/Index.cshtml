@@ -9,11 +9,18 @@
     <div class="row">
         <div class="col-12 mt-5">
             <form asp-action="Search" asp-controller="Home" class="form-inline d-flex flex-nowrap">
-                <div class="form-group col-lg-9">
-                    <input type="text" class="form-control border-primary w-100 h1 my-0 form-control-lg" id="bookSearch" placeholder="Search book" name="req">
+                <div class="form-group col-lg-2">
                 </div>
-                <div class="form-group col-lg-3">
-                    <button type="submit" class="btn btn-primary my-0 form-control-lg">Search</button>
+                <div class="form-group col-lg-8">
+                    <div class="col-lg-11">
+                        <input type="text" class="form-control border-primary w-100 h1 my-0 form-control-lg" id="bookSearch" placeholder="Search book" name="req">
+                    </div>
+                    <div class="col-lg-1">
+                        <button type="submit" class="btn btn-primary my-0 form-control-lg"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="form-group col-lg-2">
+                    @*<button type="submit" class="btn btn-primary my-0 form-control-lg"><i class="fas fa-search"></i></button>*@
                 </div>
             </form>
         </div>
@@ -34,16 +41,41 @@
                 {
                     <img class="card w-100" src="data:image/jpeg;base64,@(Convert.ToBase64String(book.Image))" />
                 }
-                <div class="card-body">
-                    <p class="card-title h3 d-block">"@book.Title"</p>
+                    <div class="card-body">
+                        <p class="card-title h4 d-block">"@book.Title"</p>
 
-                    <p class="card-title h4 d-block">Author: <a asp-action="GetAuthorInfo" asp-route-id="@authorService.Get(book.AuthorId).Id">@authorService.Get(book.AuthorId).Name @authorService.Get(book.AuthorId).Surname</a></p>
+                        <p class="card-title h5 d-block">Author: <a asp-action="GetAuthorInfo" asp-route-id="@authorService.Get(book.AuthorId).Id">@authorService.Get(book.AuthorId).Name @authorService.Get(book.AuthorId).Surname</a></p>
+                        <p class="card-title h5 d-block">Genre: @book.Genre</p>
 
-                    <hr />
-                    <p class="card-title h4 d-block">Release year: @book.Year</p>
-                    <p class="card-title h4 d-block">Rating: @book.Rate / 5</p>
-                    <a class="btn btn-primary" asp-action="GetBookInfo" asp-route-id="@book.Id">More</a>
-                </div>
+                        <p class="card-title h5 d-block">Release year: @book.Year</p>
+                        <hr />
+
+                        @if (book.Rate <= 1)
+                        {
+                            <p class="card-title h5 d-block">Rating: <b style="color: firebrick">@book.Rate</b> / 5</p>
+                        }
+                        else if (book.Rate <= 2)
+                        {
+                            <p class="card-title h5 d-block">Rating: <b style="color:darkorange">@book.Rate</b> / 5</p>
+
+                        }
+                        else if (book.Rate <= 3)
+                        {
+                            <p class="card-title h5 d-block">Rating: <b style="color:gold">@book.Rate</b> / 5</p>
+                        }
+                        else if (book.Rate <= 4)
+                        {
+                            <p class="card-title h5 d-block">Rating: <b style="color:chartreuse">@book.Rate</b> / 5</p>
+                        }
+                        else
+                        {
+                            <p class="card-title h5 d-block">Rating: <b style="color:cyan">@book.Rate</b> / 5</p>
+                        }
+
+
+
+                        <a class="btn btn-primary" asp-action="GetBookInfo" asp-route-id="@book.Id">More</a>
+                    </div>
             </div>
         }
     </div>
