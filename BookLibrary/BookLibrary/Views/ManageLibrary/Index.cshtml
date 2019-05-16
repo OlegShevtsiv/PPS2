@@ -17,10 +17,10 @@
         </tr>
     </thead>
     <tbody>
+        @{int i = 0;}
         @foreach (var book in Model)
         {
-            int i = 0;
-            i += 1;
+            i++;
             <tr>
                 <th scope="row">@i</th>
                 <td>@book.Title</td>

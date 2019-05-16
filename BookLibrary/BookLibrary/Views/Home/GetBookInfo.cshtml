@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using Services.Interfaces;
 @using BookLibrary.ViewModels.ManageComments;
+@using BookLibrary.ViewModels.Home;
+
 
 @model Services.DTO.BookDTO
 @{
@@ -10,6 +12,8 @@
 
 @inject IAuthorService authorService
 @inject UserManager<IdentityUser> userManager
+@inject SignInManager<IdentityUser> signInManager
+
 
 <div class="container pt-3 pb-4">
     <div class="row py-5">
@@ -43,35 +47,28 @@
                 <div class="h4 pr-3">Number of votes: @Model.RatesAmount</div>
             </div>
 
-            <form asp-action="RateBook" asp-controller="Home" method="post" class="d-flex">
-                <div class="form-group">
-                    <input type="hidden" name="bookId" value="@Model.Id" />
-                </div>
-
-                <div class="form-group">
-                    <input type="hidden" name="userId" value="@((await userManager.GetUserAsync(User)).Id)" />
-                </div>
-
-                <div class="form-group pt-3">
-                    <select type="number" name="rate" class="form-control form-control-lg rate-select">
-                        @for (int i = 1; i <= 5; i++)
-                        {
-                            <option value="@i">@i</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group mb-0 d-flex align-items-center ml-3">
-                    <input type="submit" value="Rate" class="btn btn-success" />
-                </div>
-            </form>
+            @if (signInManager.IsSignedIn(User))
+            {
+                await Html.RenderPartialAsync("~/Views/Home/_RatePartial.cshtml", new RateViewModel { RatedEssenceId = Model.Id, UserId = (await userManager.GetUserAsync(User)).Id });
+            }
+            else
+            {
+                <form asp-action="RateBook" asp-controller="Home" method="post" class="d-flex">
+                    <div class="form-group pt-3">
+                        <select type="number" class="form-control form-control-lg rate-select" disabled>
+                            <option>1</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-0 d-flex align-items-center ml-3">
+                        <input type="submit" value="Rate" class="btn btn-success" />
+                    </div>
+                </form>
+            }
         </div>
         <div class="col-12">
-
             @{await Html.RenderPartialAsync("~/Views/ManageComments/_CommentPartial.cshtml", new CommentedEssenceViewModel { EssenceId = Model.Id, isBook = true });}
-
         </div>
     </div>
-
 </div>
 
 

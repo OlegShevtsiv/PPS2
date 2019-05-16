@@ -17,16 +17,16 @@
         </tr>
     </thead>
     <tbody>
+        @{int i = 0;}
         @foreach (var author in Model)
         {
-            int i = 0;
-            i += 1;
+            i++;
             <tr>
                 <th scope="row">@i</th>
                 <td>@author.Name</td>
                 <td>@author.Surname</td>
                 <td>
-                    <form asp-action="DeleteAuthor" asp-route-id="@author.Id" method="post">
+                    <form asp-action="DeleteAuthor" asp-route-id="@author.Id" method="post" class="d-flex justify-content-end">
                         <a class="btn btn-sm btn-primary" asp-action="EditAuthor" asp-route-id="@author.Id">Edit</a>
                         <button type="submit" class="btn btn-sm btn-danger">
                             Delete

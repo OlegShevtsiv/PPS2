@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BookLibrary.Models;
-using DataAccess;
 using Services.Interfaces;
 using Services.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using BookLibrary.ViewModels.Home;
 
 namespace BookLibrary.Controllers
 {
@@ -87,9 +85,7 @@ namespace BookLibrary.Controllers
                 }
             }
 
-            var result = param.Distinct().ToList();
-
-            return View("~/Views/Home/Index.cshtml", result);
+            return View("~/Views/Home/Index.cshtml", param.ToList());
         }
 
         [HttpGet]
@@ -143,29 +139,34 @@ namespace BookLibrary.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult RateBook(string bookId, string userId, decimal rate)
+        public IActionResult RateBook(RateViewModel rateVM)
         {
-            if (string.IsNullOrEmpty(bookId) || string.IsNullOrEmpty(userId) || rate < 1 || rate > 5)
+            if (string.IsNullOrEmpty(rateVM.UserId) || string.IsNullOrEmpty(rateVM.RatedEssenceId) || rateVM.Value < 1 || rateVM.Value > 5)
             {
                 RedirectToAction("Error");
             }
-            BookDTO bookTORate = _bookService.Get(bookId);
+            BookDTO bookTORate = _bookService.Get(rateVM.RatedEssenceId);
             if (bookTORate == null)
             {
                 return RedirectToAction("Error");
             }
-            RateDTO yourRate = new RateDTO { BookId = bookId, UserId = userId, Value = rate};
+            RateDTO yourRate = new RateDTO {
+                                               BookId = rateVM.RatedEssenceId,
+                                               UserId = rateVM.UserId,
+                                               Value = rateVM.Value
+                                           };
+
             List<RateDTO> allRates = _rateService.GetAll().ToList();
             if (allRates != null)
             {
                 bool isFinded = false;
                 foreach (var r in allRates)
                 {
-                    if (r.BookId == bookId && r.UserId == userId)
+                    if (r.BookId == rateVM.RatedEssenceId && r.UserId == rateVM.UserId)
                     {
                         isFinded = true;
                         yourRate.Id = r.Id;
-                        bookTORate.Rate = (bookTORate.Rate * bookTORate.RatesAmount - r.Value + rate) / bookTORate.RatesAmount;
+                        bookTORate.Rate += (yourRate.Value - r.Value) / bookTORate.RatesAmount;
                         _rateService.Update(yourRate);
                         _bookService.Update(bookTORate);
                         break;
@@ -175,7 +176,7 @@ namespace BookLibrary.Controllers
                 {
                     uint amount = bookTORate.RatesAmount;
                     bookTORate.RatesAmount++;
-                    bookTORate.Rate = (bookTORate.Rate * amount + rate) / bookTORate.RatesAmount;
+                    bookTORate.Rate = (bookTORate.Rate * amount + yourRate.Value) / bookTORate.RatesAmount;
                     _bookService.Update(bookTORate);
                     _rateService.Add(yourRate);
                 }
@@ -184,7 +185,7 @@ namespace BookLibrary.Controllers
             {
                 uint amount = bookTORate.RatesAmount;
                 bookTORate.RatesAmount++;
-                bookTORate.Rate = (bookTORate.Rate * amount + rate) / bookTORate.RatesAmount;
+                bookTORate.Rate = (bookTORate.Rate * amount + yourRate.Value) / bookTORate.RatesAmount;
                 _bookService.Update(bookTORate);
                 _rateService.Add(yourRate);
             }

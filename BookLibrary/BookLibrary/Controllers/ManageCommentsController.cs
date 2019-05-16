@@ -20,7 +20,40 @@ namespace BookLibrary.Controllers
         {
             _commentService = commentService;
         }
-        
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AddComment(string ownerId, string essenceId, string isBook, string text)
+        {
+
+            if (string.IsNullOrEmpty(ownerId) || string.IsNullOrEmpty(essenceId) || string.IsNullOrEmpty(isBook) || string.IsNullOrEmpty(text))
+            {
+                RedirectToAction("Error");
+            }
+            if (!bool.TryParse(isBook, out bool isBookToParse))
+            {
+                return RedirectToAction("Error");
+            }
+
+            CommentDTO newComment = new CommentDTO
+            {
+                OwnerId = ownerId,
+                CommentedEssenceId = essenceId,
+                Text = text,
+                Time = DateTime.Now
+            };
+            _commentService.Add(newComment);
+            if (isBookToParse)
+            {
+                return RedirectToAction("GetBookInfo", "Home", new { id = essenceId });
+            }
+            else
+            {
+                return RedirectToAction("GetAuthorInfo", "Home", new { id = essenceId });
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         public IActionResult EditComment(string id, string ownerId, string essenceId, string isBook, string time, string text)
         {
@@ -57,6 +90,7 @@ namespace BookLibrary.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult DeleteComment(string comentId, string isBook, string essenceId)
         {
@@ -68,7 +102,6 @@ namespace BookLibrary.Controllers
             {
                 return RedirectToAction("Error");
             }
-
 
             if (_commentService.Get(comentId) == null)
             {
@@ -85,37 +118,7 @@ namespace BookLibrary.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPost]
-        public IActionResult AddComment(string ownerId, string essenceId, string isBook, string text)
-        {
-            
-            if (string.IsNullOrEmpty(ownerId) || string.IsNullOrEmpty(essenceId) || string.IsNullOrEmpty(isBook) || string.IsNullOrEmpty(text))
-            {
-                RedirectToAction("Error");
-            }
-            if (!bool.TryParse(isBook, out bool isBookToParse))
-            {
-                return RedirectToAction("Error");
-            }
-
-            CommentDTO newComment = new CommentDTO
-            {
-                OwnerId = ownerId,
-                CommentedEssenceId = essenceId,
-                Text = text,
-                Time = DateTime.Now
-            };
-            _commentService.Add(newComment);
-            if (isBookToParse)
-            {
-                return RedirectToAction("GetBookInfo", "Home", new { id = essenceId });
-            }
-            else
-            {
-                return RedirectToAction("GetAuthorInfo", "Home", new { id = essenceId });
-            }
-        }
+       
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

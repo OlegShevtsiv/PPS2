@@ -30,22 +30,21 @@
         @foreach (var book in Model)
         {
             <div class="col-12 col-md-6 col-lg-3">
-                    @if (book.Image != null)
-                    {
-                        <img class="card w-100"  src="data:image/jpeg;base64,@(Convert.ToBase64String(book.Image))" />
-                    }
-                    <div class="card-body">
-                        <p class="card-title h3 d-block">"@book.Title"</p>
+                @if (book.Image != null)
+                {
+                    <img class="card w-100" src="data:image/jpeg;base64,@(Convert.ToBase64String(book.Image))" />
+                }
+                <div class="card-body">
+                    <p class="card-title h3 d-block">"@book.Title"</p>
 
-                        <p class="card-title h4 d-block">Author: <a asp-action="GetAuthorInfo" asp-route-id="@authorService.Get(book.AuthorId).Id">@authorService.Get(book.AuthorId).Name @authorService.Get(book.AuthorId).Surname</a></p>
+                    <p class="card-title h4 d-block">Author: <a asp-action="GetAuthorInfo" asp-route-id="@authorService.Get(book.AuthorId).Id">@authorService.Get(book.AuthorId).Name @authorService.Get(book.AuthorId).Surname</a></p>
 
-                        <hr />
-                        <p class="card-title h4 d-block">Release year: @book.Year</p>
-                        <p class="card-title h4 d-block">Rating: @book.Rate / 5</p>
-                        <a class="btn btn-primary" asp-action="GetBookInfo" asp-route-id="@book.Id">More</a>
-                    </div>
+                    <hr />
+                    <p class="card-title h4 d-block">Release year: @book.Year</p>
+                    <p class="card-title h4 d-block">Rating: @book.Rate / 5</p>
+                    <a class="btn btn-primary" asp-action="GetBookInfo" asp-route-id="@book.Id">More</a>
                 </div>
-
+            </div>
         }
     </div>
 </div>
