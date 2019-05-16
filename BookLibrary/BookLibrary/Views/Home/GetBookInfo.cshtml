@@ -1,0 +1,78 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Services.Interfaces;
+@using BookLibrary.ViewModels.ManageComments;
+
+@model Services.DTO.BookDTO
+@{
+    ViewData["Title"] = "Get book info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@inject IAuthorService authorService
+@inject UserManager<IdentityUser> userManager
+
+<div class="container pt-3 pb-4">
+    <div class="row py-5">
+        <div class="col-md-4 d-flex flex-column pt-3">
+            <img class="w-100" style="width:350px; height:400px;" alt="@Model.Title" src="data:image/jpeg;base64,@(Convert.ToBase64String(@Model.Image))" />
+        </div>
+        <div class="col-12 col-md-5 d-flex flex-column pt-3">
+            <div class="d-flex">
+                <h2 class="pr-3 my-0">@Model.Title</h2>
+                <div>
+                    <a asp-action="DownloadBook" asp-route-id="@Model.Id" class="btn btn-primary">Download</a>
+                </div>
+            </div>
+            <div class="h4">Description:</div>
+            <p class="text-secondary">@Model.Description</p>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="book_desc d-flex">
+                <div class="h3 text-bold pr-3  my-0">Author</div>
+                <div class="h4 pt-1 my-0">
+                    <a asp-action="GetAuthorInfo" asp-route-id="@authorService.Get(Model.AuthorId).Id">@authorService.Get(Model.AuthorId).Name @authorService.Get(Model.AuthorId).Surname</a>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="h4 pr-3">Genre: @Model.Genre</div>
+            </div>
+            <div class="d-flex">
+                <div class="h4 pr-3">Rating: @Model.Rate / 5</div>
+            </div>
+            <div class="d-flex">
+                <div class="h4 pr-3">Number of votes: @Model.RatesAmount</div>
+            </div>
+
+            <form asp-action="RateBook" asp-controller="Home" method="post" class="d-flex">
+                <div class="form-group">
+                    <input type="hidden" name="bookId" value="@Model.Id" />
+                </div>
+
+                <div class="form-group">
+                    <input type="hidden" name="userId" value="@((await userManager.GetUserAsync(User)).Id)" />
+                </div>
+
+                <div class="form-group pt-3">
+                    <select type="number" name="rate" class="form-control form-control-lg rate-select">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group mb-0 d-flex align-items-center ml-3">
+                    <input type="submit" value="Rate" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+        <div class="col-12">
+
+            @{await Html.RenderPartialAsync("~/Views/ManageComments/_CommentPartial.cshtml", new CommentedEssenceViewModel { EssenceId = Model.Id, isBook = true });}
+
+        </div>
+    </div>
+
+</div>
+
+
+

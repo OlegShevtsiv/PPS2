@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Services.DTO.BookDTO>
+@{
+    ViewData["Title"] = "Books list";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mt-5">Books List</h2>
+<a class="btn btn-success" asp-action="AddBook">Add book</a>
+<a class="btn btn-default" asp-action="AuthorsList">Authors list</a>
+<table class="table mt-5">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Year</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            int i = 0;
+            i += 1;
+            <tr>
+                <th scope="row">@i</th>
+                <td>@book.Title</td>
+                <td>@book.Year</td>
+                <td>
+                    <form asp-action="DeleteBook" asp-route-id="@book.Id" method="post" class="d-flex justify-content-end">
+                        <a class="btn btn-sm btn-primary" asp-action="EditBook" asp-route-id="@book.Id">Edit</a>
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+
+</table>
+
+
+
+
