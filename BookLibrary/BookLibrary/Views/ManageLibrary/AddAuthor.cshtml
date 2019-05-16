@@ -1,4 +1,4 @@
-﻿@model BookLibrary.ViewModels.ManageLibrary.AddAuthorViewModel
+﻿@model BookLibrary.ViewModels.ManageLibrary.AuthorViewModel
 @{
         ViewData["Title"] = "Add author";
         Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,19 +10,19 @@
             <form asp-action="AddAuthor" asp-controller="ManageLibrary" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
+                    <label class="control-label">Name</label>
                     <input type="text" asp-for="Name" class="form-control form-control-lg" required />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Surname" class="control-label"></label>
+                    <label class="control-label">Surname</label>
                     <input type="text" asp-for="Surname" class="form-control form-control-lg" required />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Image" class="control-label"></label>
-                    <input type="file" asp-for="Image" class="form-control form-control-lg" required />
+                    <label class="control-label">Image</label>
+                    <input type="file" asp-for="Image" class="form-control-file form-control-lg border" required />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Description" class="control-label"></label>
+                    <label class="control-label">Description</label>
                     <textarea asp-for="Description" class="form-control form-control-lg" rows="8"></textarea>
                 </div>
                 <div class="form-group">

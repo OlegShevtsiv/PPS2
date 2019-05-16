@@ -6,13 +6,13 @@
 
 <h2 class="mt-5">Authors list</h2>
 <a class="btn btn-success" asp-action="AddAuthor">Add author</a>
-<a class="btn btn-default" asp-action="Index">Books list</a>
+<a class="btn btn-outline-warning" asp-action="Index">Books list</a>
 <table class="table mt-5">
     <thead class="thead-light">
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Name</th>
             <th scope="col">Surname</th>
+            <th scope="col">Name</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -21,19 +21,19 @@
         @foreach (var author in Model)
         {
             i++;
-            <tr>
-                <th scope="row">@i</th>
-                <td>@author.Name</td>
-                <td>@author.Surname</td>
-                <td>
-                    <form asp-action="DeleteAuthor" asp-route-id="@author.Id" method="post" class="d-flex justify-content-end">
-                        <a class="btn btn-sm btn-primary" asp-action="EditAuthor" asp-route-id="@author.Id">Edit</a>
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Delete
-                        </button>
-                    </form>
-                </td>
-            </tr>
+        <tr>
+            <th scope="row">@i</th>
+            <td>@author.Surname</td>
+            <td>@author.Name</td>
+            <td class="d-flex justify-content-end">
+                <form asp-action="DeleteAuthor" asp-route-id="@author.Id" method="post">
+                    <a class="btn btn-sm btn-primary" asp-action="EditAuthor" asp-route-id="@author.Id">Edit</a>
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
         }
 
 </table>

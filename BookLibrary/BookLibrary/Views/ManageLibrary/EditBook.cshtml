@@ -1,5 +1,5 @@
 ﻿@using Services.Interfaces;
-@model BookLibrary.ViewModels.ManageLibrary.EditBookViewModel
+@model BookLibrary.ViewModels.ManageLibrary.BookViewModel
 @{
     ViewData["Title"] = "Edit book";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -35,16 +35,16 @@
             </div>
             <div class="form-row my-5">
                 <div class="col">
-                    <label class="control-label">Year</label>
+                    <label class="control-label">Release year</label>
                     <input type="number" asp-for="Year" class="form-control form-control-lg" required />
                 </div>
                 <div class="col">
                     <label class="control-label">Image</label>
-                    <input type="file" asp-for="Image" class="form-control form-control-lg" required />
+                    <input type="file" asp-for="Image" class="form-control-file form-control-lg border" required />
                 </div>
                 <div class="col">
-                    <label class="control-label">Book file</label>
-                    <input type="file" asp-for="FileBook" class="form-control form-control-lg" required />
+                    <label class="control-label">File of book</label>
+                    <input type="file" asp-for="FileBook" class="form-control-file form-control-lg border" required />
                 </div>
             </div>
             <div class="form-group">
@@ -55,20 +55,10 @@
                 <label class="control-label">Description</label>
                 <textarea type="text" asp-for="Description" class="form-control"></textarea>
             </div>
-            <div class="form-group">
-                @*<label class="control-label">Rate</label>*@
-                <input type="number" asp-for="Rate" hidden />
-                @*<select type="number" asp-for="Rate" class="form-control" required>
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        <option value="@i">@i</option>
-                    }
-                </select>*@
-            </div>
-            <div class="form-group">
-                @*<label class="control-label">Rates Amount</label>*@
-                <input type="number" asp-for="RatesAmount" hidden />
-            </div>
+
+            <input type="number" asp-for="Rate" hidden />
+            <input type="number" asp-for="RatesAmount" hidden />
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-success" />
             </div>

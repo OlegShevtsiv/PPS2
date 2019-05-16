@@ -9,21 +9,20 @@
 
 <form asp-action="EditUserRoles" method="post">
     <input type="hidden" name="userId" value="@Model.UserId" />
-    <div class="form-group">
+    <div class="input-group mb-3">
         @foreach (IdentityRole role in Model.AllRoles)
         {
-        <div class="d-flex">
-            <div class="input-group-prepend">
-                <div class="input-group-text bg-white border-0">
-                    <input type="radio" name="roles" value="@role.Name"
-                           @(Model.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "")>
+            <div class="d-flex mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="radio" name="roles" value="@role.Name"
+                               @(Model.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "")>
                         <span class="checkmark"></span>
                     </div>
                 </div>
-
-            <label class="pl-3 h4 m-0">@role.Name</label>
+                <label class="form-control">@role.Name</label>
             </div>
-            }
+        }
     </div>
     <button type="submit" class="btn btn-success">Save</button>
 </form>

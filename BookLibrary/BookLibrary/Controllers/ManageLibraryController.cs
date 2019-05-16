@@ -41,7 +41,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBook(AddBookViewModel model)
+        public IActionResult AddBook(BookViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace BookLibrary.Controllers
             {
                 return RedirectToAction("Error");
             }
-            EditBookViewModel model = new EditBookViewModel {
+            BookViewModel model = new BookViewModel {
                 Id = getedBook.Id,
                 Title = getedBook.Title.Trim(),
                 AuthorId = getedBook.AuthorId,
@@ -109,7 +109,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditBook(EditBookViewModel model)
+        public IActionResult EditBook(BookViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -179,7 +179,7 @@ namespace BookLibrary.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddAuthor(AddAuthorViewModel model)
+        public IActionResult AddAuthor(AuthorViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -222,17 +222,18 @@ namespace BookLibrary.Controllers
             {
                 return RedirectToAction("Error");
             }
-            EditAuthorViewModel model = new EditAuthorViewModel
+            AuthorViewModel model = new AuthorViewModel
             {
+                Id = getedAuthor.Id.Trim(),
                 Name = getedAuthor.Name.Trim(),
                 Surname = getedAuthor.Surname.Trim(),
-                Description = getedAuthor.Description
+                Description = getedAuthor.Description,
             };
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult EditAuthor(EditAuthorViewModel model)
+        public IActionResult EditAuthor(AuthorViewModel model)
         {
             if (ModelState.IsValid)
             {
