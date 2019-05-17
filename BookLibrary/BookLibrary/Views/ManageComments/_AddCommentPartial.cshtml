@@ -1,0 +1,32 @@
+﻿@*<h3 class="mt-5">Add your comment</h3>
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-action="AddComment" asp-controller="ManageComments" method="post">
+        <div class="form-group">
+            <input type="hidden" name="ownerId" value="@((await UserManager.GetUserAsync(User)).Id)" />
+        </div>
+        <div class="form-group">
+            <input type="hidden" name="essenceId" value="@Model.EssenceId" />
+        </div>
+        <div class="form-group">
+            <input type="hidden" name="isBook" value="@Model.isBook.ToString()" />
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" name="text" required rows="5"></textarea>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Comment" class="btn btn-success" />
+        </div>
+    </form>
+}
+else
+{
+    <form asp-action="AddComment" asp-controller="ManageComments" method="post">
+        <div class="form-group">
+            <textarea class="form-control" disabled rows="5"></textarea>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Comment" class="btn btn-success" />
+        </div>
+    </form>
+}*@

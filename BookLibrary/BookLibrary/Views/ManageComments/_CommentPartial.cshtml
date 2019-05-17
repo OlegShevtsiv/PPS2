@@ -51,8 +51,8 @@ else
         {
             <div class="col-lg-12">
 
-                <p style="color:dodgerblue">
-                    <b><ins>You</ins> @c.Time</b>
+                <p>
+                    <b><ins style="color:dodgerblue">You</ins></b>  <em style="color:dimgrey">@c.Time</em>
                 </p>
 
                 <div class="col-lg-11">
@@ -105,10 +105,10 @@ else
         {
 
             @if ((await UserManager.IsInRoleAsync((UserManager.Users.First(u => u.Id == c.OwnerId)), "user admin")) &&
-  (await UserManager.IsInRoleAsync((UserManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
+   (await UserManager.IsInRoleAsync((UserManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
             {
                 <div class="col-lg-11">
-                    <p><ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins>   <em style="color:darkblue; font-size: small;">@c.Time</em></p>
+                    <p><ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins>  <em style="color:dimgrey">@c.Time</em></p>
                     <div class="form-group">
                         <p class="h4 text-secondary border px-3 py-2 rounded">@c.Text</p>
                     </div>
@@ -117,7 +117,9 @@ else
             else if ((await UserManager.IsInRoleAsync((UserManager.Users.First(u => u.Id == c.OwnerId)), "user admin")))
             {
                 <div class="col-lg-11">
-                    <p style="color:firebrick"><ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> User admin @c.Time</p>
+                    <p style="color:firebrick">
+                        <ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> User admin  <em style="color:dimgrey">@c.Time</em>
+                    </p>
                     <div class="form-group">
                         <p class="h4 text-secondary border px-3 py-2 rounded">@c.Text</p>
                     </div>
@@ -128,11 +130,14 @@ else
                 <div class="col-lg-12">
                     @if ((await UserManager.IsInRoleAsync((UserManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
                     {
-                        <p style="color: seagreen"><ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Library admin @c.Time</p>
+                        <p style="color: seagreen">
+                            <ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Library admin <em style="color:dimgrey">@c.Time</em>
+                        </p>
+
                     }
                     else
                     {
-                        <p style="color:dimgrey"><ins>@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> @c.Time</p>
+                        <p style="color:dimgrey"><ins>@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> <em>@c.Time</em></p>
                     }
                     <div class="col-lg-11">
                         <div class="form-group">
@@ -166,15 +171,19 @@ else
             <div class="col-lg-12">
                 @if ((await UserManager.IsInRoleAsync((UserManager.Users.First(u => u.Id == c.OwnerId)), "user admin")))
                 {
-                    <p style="color: firebrick"><ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> User admin @c.Time</p>
+                    <p style="color: firebrick">
+                <ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> User admin <em style="color:dimgrey">@c.Time</em>
+                    </p>
                 }
                 else if ((await UserManager.IsInRoleAsync((UserManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
                 {
-                    <p style="color: seagreen"><ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Library admin @c.Time</p>
+                    <p style="color: seagreen">
+                <ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Library admin <em style="color:dimgrey">@c.Time</em>
+                    </p>
                 }
                 else
                 {
-                    <p style="color:dimgrey"><ins>@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> @c.Time</p>
+                    <p style="color:dimgrey"><ins>@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> <em>@c.Time</em></p>
                 }
                 <div class="col-lg-11">
                     <div class="form-group">
@@ -206,13 +215,13 @@ else
    (await UserManager.IsInRoleAsync((UserManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
             {
                 <div class="col-lg-11">
-                    <p style="color: red"><ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Admin @c.Time</p>
+                    <p style="color: red"><ins style="color:black">@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Admin <em style="color:dimgrey">@c.Time</em></p>
                 </div>
             }
             else
             {
                 <div class="col-lg-11">
-                    <p style="color:dimgrey"><ins>@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> @c.Time</p>
+                    <p style="color:dimgrey"><ins>@((UserManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> <em>@c.Time</em></p>
                 </div>
             }
             <div class="col-lg-11">
