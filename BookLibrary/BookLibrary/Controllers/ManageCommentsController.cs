@@ -107,7 +107,6 @@ namespace BookLibrary.Controllers
                 return RedirectToAction("GetAuthorInfo", "Home", new { id = commentToRemove.EssenceId });
             }
         }
-
        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

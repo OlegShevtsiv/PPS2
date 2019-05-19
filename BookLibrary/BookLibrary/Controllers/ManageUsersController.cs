@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Services.Filters;
+using BookLibrary.ViewModels.ManageComments;
 
 namespace BookLibrary.Controllers
 {
@@ -143,6 +144,32 @@ namespace BookLibrary.Controllers
 
             return RedirectToAction("Error");
         }
+
+        //[HttpPost]
+        //public IActionResult BlockUser(CommentViewModel comment)
+        //{
+        //    // блокуємо юзера
+        //    // видаляємо усі його коментарі
+
+
+        //    if (comment.IsBook)
+        //    {
+        //        return RedirectToAction("GetBookInfo", "Home", new { id = comment.EssenceId });
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("GetAuthorInfo", "Home", new { id = comment.EssenceId });
+        //    }
+        //}
+
+        //[HttpPost]
+        //public IActionResult UnblockUser(string userId)
+        //{
+        //    // розблоковуємо юзера
+
+
+        //    return RedirectToAction("Error");
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

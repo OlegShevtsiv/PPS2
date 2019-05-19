@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using Services.Interfaces;
 @using Services.Filters;
+@using BookLibrary.ViewModels.ManageComments;
 
 @inject ICommentService commentServive
 @inject UserManager<IdentityUser> userManager
@@ -29,10 +30,10 @@
                             <input type="hidden" asp-for="OwnerId" value="@((await userManager.GetUserAsync(User)).Id)" />
                         </div>
                         <div class="form-group">
-                            <input type="hidden" asp-for="EssenceId" value="@Model.EssenceId" />
+                            <input type="hidden" asp-for="EssenceId" />
                         </div>
                         <div class="form-group">
-                            <input type="hidden" asp-for="IsBook" value="@Model.IsBook" />
+                            <input type="hidden" asp-for="IsBook" />
                         </div>
                         <div class="form-group">
                             <input type="hidden" asp-for="Time" value="@c.Time" />
@@ -56,9 +57,9 @@
                         <div class="form-group">
                             <input type="hidden" asp-for="IsBook" value="@Model.IsBook" />
                         </div>
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Delete
-                        </button>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-sm btn-danger" value="Delete" />
+                        </div>
                     </form>
                 </div>
             </div>
@@ -69,7 +70,7 @@
         {
 
             @if ((await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "user admin")) &&
-  (await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
+(await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
             {
                 <div class="col-lg-11">
                     <p><ins style="color:black">@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins>  <em style="color:dimgrey">@c.Time</em></p>
@@ -119,11 +120,14 @@
                             <div class="form-group">
                                 <input type="hidden" asp-for="IsBook" value="@Model.IsBook" />
                             </div>
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                Delete
-                            </button>
+                            <div class="form-group col-lg-6">
+                                <input type="submit" class="btn btn-sm btn-danger" value="Delete" />
+                            </div>
                         </form>
                     </div>
+                    @*<div class="col-lg-1">
+                        <form class="btn btn-sm btn-warning" asp-controller="ManageUsers" asp-action="BlockUser" asp-route-comment="@{new CommentViewModel { EssenceId = Model.EssenceId, OwnerId = c.OwnerId, IsBook = Model.IsBook };}" method="post">Block User</form>
+                    </div>*@
                 </div>
             }
         }
@@ -132,51 +136,58 @@
         (await userManager.IsInRoleAsync((await userManager.GetUserAsync(User)), "library admin")))
         {
 
-            <div class="col-lg-12">
-                @if ((await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "user admin")))
-                {
-                    <p style="color: firebrick">
-                        <ins style="color:black">@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> User admin <em style="color:dimgrey">@c.Time</em>
-                    </p>
-                }
-                else if ((await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
-                {
-                    <p style="color: seagreen">
-                        <ins style="color:black">@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Library admin <em style="color:dimgrey">@c.Time</em>
-                    </p>
-                }
-                else
-                {
-                    <p style="color:dimgrey"><ins>@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> <em>@c.Time</em></p>
-                }
-                <div class="col-lg-11">
-                    <div class="form-group">
-                        <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
+                <div class="col-lg-12">
+                    @if ((await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "user admin")))
+                    {
+                        <p style="color: firebrick">
+                            <ins style="color:black">@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> User admin <em style="color:dimgrey">@c.Time</em>
+                        </p>
+                    }
+                    else if ((await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
+                    {
+                        <p style="color: seagreen">
+                            <ins style="color:black">@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Library admin <em style="color:dimgrey">@c.Time</em>
+                        </p>
+                    }
+                    else
+                    {
+                        <p style="color:dimgrey"><ins>@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> <em>@c.Time</em></p>
+                    }
+                    <div class="col-lg-11">
+                        <div class="form-group">
+                            <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
+                        </div>
                     </div>
+                    <div class="col-lg-1">
+                        <form asp-action="DeleteComment" asp-controller="ManageComments" method="post">
+                            <div class="form-group">
+                                <input type="hidden" asp-for="Id" value="@c.Id" />
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" asp-for="EssenceId" value="@Model.EssenceId" />
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" asp-for="IsBook" value="@Model.IsBook" />
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-sm btn-danger" value="Delete" />
+                            </div>
+                        </form>
+                    </div>
+                    @*<div class="col-lg-1">
+                        <form asp-controller="ManageUsers" asp-action="BlockUser" method="post">
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-sm btn-warning"  asp-route-comment="@{new CommentViewModel { EssenceId = Model.EssenceId, OwnerId = c.OwnerId, IsBook = Model.IsBook };}" value="Block User" />
+                            </div>
+                        </form>
+                    </div>*@
                 </div>
-                <div class="col-lg-1">
-                    <form asp-action="DeleteComment" asp-controller="ManageComments" method="post">
-                        <div class="form-group">
-                            <input type="hidden" asp-for="Id" value="@c.Id" />
-                        </div>
-                        <div class="form-group">
-                            <input type="hidden" asp-for="EssenceId" value="@Model.EssenceId" />
-                        </div>
-                        <div class="form-group">
-                            <input type="hidden" asp-for="IsBook" value="@Model.IsBook" />
-                        </div>
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Delete
-                        </button>
-                    </form>
-                </div>
-            </div>
 
         }
         else
         {
             @if ((await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "user admin")) ||
-  (await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
+(await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
             {
                 <div class="col-lg-11">
                     <p style="color: red"><ins style="color:black">@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Admin <em style="color:dimgrey">@c.Time</em></p>
