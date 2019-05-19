@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTO;
 using Services.Interfaces;
+using BookLibrary.ViewModels.ManageComments;
 
 namespace BookLibrary.Controllers
 {
@@ -23,98 +24,87 @@ namespace BookLibrary.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult AddComment(string ownerId, string essenceId, string isBook, string text)
+        public IActionResult AddComment(CommentViewModel newComment)
         {
-
-            if (string.IsNullOrEmpty(ownerId) || string.IsNullOrEmpty(essenceId) || string.IsNullOrEmpty(isBook) || string.IsNullOrEmpty(text))
-            {
-                RedirectToAction("Error");
-            }
-            if (!bool.TryParse(isBook, out bool isBookToParse))
+            if (newComment == null)
             {
                 return RedirectToAction("Error");
             }
 
-            CommentDTO newComment = new CommentDTO
+            CommentDTO comment = new CommentDTO
             {
-                OwnerId = ownerId,
-                CommentedEssenceId = essenceId,
-                Text = text,
+                OwnerId = newComment.OwnerId,
+                CommentedEssenceId = newComment.EssenceId,
+                Text = newComment.Text,
                 Time = DateTime.Now
             };
-            _commentService.Add(newComment);
-            if (isBookToParse)
+            _commentService.Add(comment);
+            if (newComment.IsBook)
             {
-                return RedirectToAction("GetBookInfo", "Home", new { id = essenceId });
+                return RedirectToAction("GetBookInfo", "Home", new { id = newComment.EssenceId });
             }
             else
             {
-                return RedirectToAction("GetAuthorInfo", "Home", new { id = essenceId });
+                return RedirectToAction("GetAuthorInfo", "Home", new { id = newComment.EssenceId });
             }
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult EditComment(string id, string ownerId, string essenceId, string isBook, string time, string text)
+        public IActionResult EditComment(CommentViewModel commentToEdit, string text)
         {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(ownerId) || string.IsNullOrEmpty(essenceId) || string.IsNullOrEmpty(isBook) || string.IsNullOrEmpty(text) || string.IsNullOrEmpty(time))
+           
+            if (commentToEdit == null)
             {
-                RedirectToAction("Error");
+                return RedirectToAction("Error");
             }
-
-            if (!bool.TryParse(isBook, out bool isBookToParse))
+            if (string.IsNullOrEmpty(text))
             {
-                RedirectToAction("Error");
-            }
-            if (!DateTime.TryParse(time, out DateTime dateTime))
-            {
-                RedirectToAction("Error");
+                _commentService.Remove(commentToEdit.Id);
+                goto loop;
             }
 
             CommentDTO updatedComment = new CommentDTO
             {
-                Id = id,
-                OwnerId = ownerId,
-                CommentedEssenceId = essenceId,
+                Id = commentToEdit.Id,
+                OwnerId = commentToEdit.OwnerId,
+                CommentedEssenceId = commentToEdit.EssenceId,
                 Text = text,
-                Time = dateTime
+                Time = commentToEdit.Time
             };
             _commentService.Update(updatedComment);
-            if (isBookToParse)
+            loop:
+            if (commentToEdit.IsBook)
             {
-                return RedirectToAction("GetBookInfo", "Home", new { id = essenceId });
+                return RedirectToAction("GetBookInfo", "Home", new { id = commentToEdit.EssenceId });
             }
             else
             {
-                return RedirectToAction("GetAuthorInfo", "Home", new { id = essenceId });
+                return RedirectToAction("GetAuthorInfo", "Home", new { id = commentToEdit.EssenceId });
             }
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult DeleteComment(string comentId, string isBook, string essenceId)
+        public IActionResult DeleteComment(CommentViewModel commentToRemove)
         {
-            if (string.IsNullOrEmpty(comentId) || string.IsNullOrEmpty(isBook) || string.IsNullOrEmpty(essenceId))
-            {
-                RedirectToAction("Error");
-            }
-            if (!bool.TryParse(isBook, out bool isBookToParse))
+            if (commentToRemove == null)
             {
                 return RedirectToAction("Error");
             }
-
-            if (_commentService.Get(comentId) == null)
+            
+            if (_commentService.Get(commentToRemove.Id) == null)
             {
-                RedirectToAction("Error");
+                return RedirectToAction("Error");
             }
-            _commentService.Remove(comentId);
-            if (isBookToParse)
+            _commentService.Remove(commentToRemove.Id);
+            if (commentToRemove.IsBook)
             {
-                return RedirectToAction("GetBookInfo", "Home", new { id = essenceId });
+                return RedirectToAction("GetBookInfo", "Home", new { id = commentToRemove.EssenceId });
             }
             else
             {
-                return RedirectToAction("GetAuthorInfo", "Home", new { id = essenceId });
+                return RedirectToAction("GetAuthorInfo", "Home", new { id = commentToRemove.EssenceId });
             }
         }
 

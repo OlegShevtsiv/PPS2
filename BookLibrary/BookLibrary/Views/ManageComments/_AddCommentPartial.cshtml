@@ -1,18 +1,25 @@
-﻿@*<h3 class="mt-5">Add your comment</h3>
-@if (SignInManager.IsSignedIn(User))
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+
+
+@model BookLibrary.ViewModels.ManageComments.CommentViewModel
+<h3 class="mt-5">Add your comment</h3>
+@if (signInManager.IsSignedIn(User))
 {
     <form asp-action="AddComment" asp-controller="ManageComments" method="post">
         <div class="form-group">
-            <input type="hidden" name="ownerId" value="@((await UserManager.GetUserAsync(User)).Id)" />
+            <input type="hidden" asp-for="OwnerId" value="@((await userManager.GetUserAsync(User)).Id)" />
         </div>
         <div class="form-group">
-            <input type="hidden" name="essenceId" value="@Model.EssenceId" />
+            <input type="hidden" asp-for="EssenceId" value="@Model.EssenceId" />
         </div>
         <div class="form-group">
-            <input type="hidden" name="isBook" value="@Model.isBook.ToString()" />
+            <input type="hidden" asp-for="IsBook" value="@Model.IsBook" />
         </div>
         <div class="form-group">
-            <textarea class="form-control" name="text" required rows="5"></textarea>
+            <textarea class="form-control" asp-for="Text" required rows="5"></textarea>
         </div>
         <div class="form-group">
             <input type="submit" value="Comment" class="btn btn-success" />
@@ -29,4 +36,4 @@ else
             <input type="submit" value="Comment" class="btn btn-success" />
         </div>
     </form>
-}*@
+}

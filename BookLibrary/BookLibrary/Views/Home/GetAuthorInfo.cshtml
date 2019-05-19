@@ -48,9 +48,8 @@
             </div>
         </div>
         <div class="col-12">
-
-            @{await Html.RenderPartialAsync("~/Views/ManageComments/_CommentPartial.cshtml", new CommentedEssenceViewModel { EssenceId = Model.Id, isBook = false });}
-
+            @{await Html.RenderPartialAsync("~/Views/ManageComments/_AddCommentPartial.cshtml", new CommentViewModel { EssenceId = Model.Id, IsBook = false });}
+            @{await Html.RenderPartialAsync("~/Views/ManageComments/_AllCommentsPartial.cshtml", new CommentViewModel { EssenceId = Model.Id, IsBook = false });}
         </div>
     </div>
 </div>
