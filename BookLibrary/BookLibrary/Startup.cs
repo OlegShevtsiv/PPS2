@@ -57,6 +57,9 @@ namespace BookLibrary
 
             services.AddScoped<IRateService, RateService>();
 
+            services.AddScoped<IBlockedUserService, BlockedUserService>();
+
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

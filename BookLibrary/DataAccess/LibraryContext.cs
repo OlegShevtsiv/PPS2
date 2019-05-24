@@ -11,6 +11,8 @@ namespace DataAccess
         public DbSet<Author> Authors { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Rate> Rates { get; set; }
+        public DbSet<BlockedUser> BlockedUsers { get; set; }
+
 
 
         public LibraryContext(DbContextOptions<LibraryContext> options)

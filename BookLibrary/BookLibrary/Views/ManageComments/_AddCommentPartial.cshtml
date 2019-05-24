@@ -1,12 +1,16 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity;
+@using Services.Interfaces;
+@using Services.Filters;
 
 @inject SignInManager<IdentityUser> signInManager
 @inject UserManager<IdentityUser> userManager
+@inject IBlockedUserService blockedUserService
 
 
 @model BookLibrary.ViewModels.ManageComments.CommentViewModel
 <h3 class="mt-5">Add your comment</h3>
-@if (signInManager.IsSignedIn(User))
+@{bool isBlocked = blockedUserService.Get(new BlockedUserFilterByUserId { UserId = (await userManager.GetUserAsync(User)).Id }).Any();} 
+@if (signInManager.IsSignedIn(User) && !isBlocked)
 {
     <form asp-action="AddComment" asp-controller="ManageComments" method="post">
         <div class="form-group">
@@ -25,6 +29,10 @@
             <input type="submit" value="Comment" class="btn btn-success" />
         </div>
     </form>
+}
+else if (isBlocked)
+{
+    <h4 style="color:brown">You are blocked to add comment!</h4>
 }
 else
 {

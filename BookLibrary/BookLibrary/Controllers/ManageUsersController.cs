@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BookLibrary.Models;
 using BookLibrary.ViewModels.ManageUsers;
-using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Services.Filters;
-using BookLibrary.ViewModels.ManageComments;
+using Services.DTO;
 
 namespace BookLibrary.Controllers
 {
@@ -22,11 +19,14 @@ namespace BookLibrary.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ICommentService _commentService;
-        public ManageUsersController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, ICommentService commentService)
+        private readonly IBlockedUserService _blockedUserService;
+
+        public ManageUsersController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, ICommentService commentService, IBlockedUserService blockedUserService)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _commentService = commentService;
+            _blockedUserService = blockedUserService;
         }
 
         [HttpGet]
@@ -145,31 +145,41 @@ namespace BookLibrary.Controllers
             return RedirectToAction("Error");
         }
 
-        //[HttpPost]
-        //public IActionResult BlockUser(CommentViewModel comment)
-        //{
-        //    // блокуємо юзера
-        //    // видаляємо усі його коментарі
+        [HttpGet]
+        public IActionResult BlockUser(string UserId, string EssenceId, bool isBook)
+        {
+            // block user
+            BlockedUserDTO blockedUser = new BlockedUserDTO { UserId = UserId };
+            _blockedUserService.Add(blockedUser);
 
+            // delete all his comments
+            foreach (var c in _commentService.Get(new CommentFilterByOwnerId { OwnerId = UserId }))
+            {
+                _commentService.Remove(c.Id);
+            }
 
-        //    if (comment.IsBook)
-        //    {
-        //        return RedirectToAction("GetBookInfo", "Home", new { id = comment.EssenceId });
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("GetAuthorInfo", "Home", new { id = comment.EssenceId });
-        //    }
-        //}
+            if (isBook)
+            {
+                return RedirectToAction("GetBookInfo", "Home", new { id = EssenceId });
+            }
+            else
+            {
+                return RedirectToAction("GetAuthorInfo", "Home", new { id = EssenceId });
+            }
+        }
 
-        //[HttpPost]
-        //public IActionResult UnblockUser(string userId)
-        //{
-        //    // розблоковуємо юзера
+        [HttpGet]
+        public IActionResult UnblockUser(string UserId)
+        {
+            if (string.IsNullOrEmpty(UserId))
+            {
+                RedirectToAction("Error");
+            }
+            string id = _blockedUserService.GetAll().First(u => u.UserId == UserId).Id;
+            _blockedUserService.Remove(id);
 
-
-        //    return RedirectToAction("Error");
-        //}
+            return RedirectToAction("Index");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,57 +1,67 @@
 ﻿@using Microsoft.AspNetCore.Identity;
+@using Services.Interfaces;]
+@using Services.Filters;
+
 @{
     ViewData["Title"] = "Users list";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @inject UserManager<IdentityUser> UserManager
 @inject SignInManager<IdentityUser> SignInManager
-    <h2 class="mt-5">Users List</h2>
+@inject IBlockedUserService _blockedUserService
 
-    <table class="table mt-5">
-        <thead class="thead-light">
+
+<h2 class="mt-5">Users List</h2>
+
+<table class="table mt-5">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Email</th>
+            <th scope="col">Login name</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int i = 0;}
+        @foreach (var user in UserManager.Users)
+        {
+            bool isBlocked = _blockedUserService.Get(new BlockedUserFilterByUserId { UserId = user.Id }).Any();
+            i++;
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Email</th>
-                <th scope="col">Login name</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ int i = 0;}
-            @foreach (var user in UserManager.Users)
-            {
-                
-                i++;
-                <tr>
-                    <th scope="row">@i</th>
-                    <td>@user.Email</td>
-                    <td>@user.UserName</td>
-                    <td class="d-flex justify-content-end">
-                        @if ((await UserManager.IsInRoleAsync((await UserManager.GetUserAsync(User)), "library admin")) && (await UserManager.IsInRoleAsync((await UserManager.GetUserAsync(User)), "user admin")))
-                        {
-                            if (!(await UserManager.IsInRoleAsync(user, "user admin")) || !(await UserManager.IsInRoleAsync(user, "library admin")))
-                            {
-                                <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post">
-                                    <a class="btn btn-sm btn-primary" asp-action="EditUser" asp-route-id="@user.Id">Edit</a>
-                                    <a class="btn btn-sm btn-warning" asp-action="EditUserRoles" asp-route-userid="@user.Id">Access rights</a>
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        Delete
-                                    </button>
-                                </form>
-                            }
-                        }
-                        else if (!(await UserManager.IsInRoleAsync(user, "user admin")))
+                <th scope="row">@i</th>
+                <td>@user.Email</td>
+                <td>@user.UserName</td>
+                <td class="d-flex justify-content-end">
+                    @if ((await UserManager.IsInRoleAsync((await UserManager.GetUserAsync(User)), "library admin")) && (await UserManager.IsInRoleAsync((await UserManager.GetUserAsync(User)), "user admin")))
+                    {
+                        if (!(await UserManager.IsInRoleAsync(user, "user admin")) || !(await UserManager.IsInRoleAsync(user, "library admin")))
                         {
                             <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post">
                                 <a class="btn btn-sm btn-primary" asp-action="EditUser" asp-route-id="@user.Id">Edit</a>
                                 <a class="btn btn-sm btn-warning" asp-action="EditUserRoles" asp-route-userid="@user.Id">Access rights</a>
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    Delete
-                                </button>
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                @if (isBlocked)
+                                {
+                                    <a class="btn btn-sm btn-success" asp-action="UnblockUser" asp-controller="ManageUsers" asp-route-UserId="@user.Id">Unblock</a>
+                                }
                             </form>
                         }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    }
+                    else if (!(await UserManager.IsInRoleAsync(user, "user admin")))
+                    {
+                        <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post">
+                            <a class="btn btn-sm btn-primary" asp-action="EditUser" asp-route-id="@user.Id">Edit</a>
+                            <a class="btn btn-sm btn-warning" asp-action="EditUserRoles" asp-route-userid="@user.Id">Access rights</a>
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            @if (isBlocked)
+                            {
+                                <a class="btn btn-sm btn-success" asp-action="UnblockUser" asp-controller="ManageUsers" asp-route-UserId="@user.Id">Unblock</a>
+                            }
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
