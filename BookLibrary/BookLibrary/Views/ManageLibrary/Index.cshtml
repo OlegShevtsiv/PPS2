@@ -1,8 +1,11 @@
-﻿@model IEnumerable<Services.DTO.BookDTO>
+﻿@using Services.Interfaces;
+@model IEnumerable<Services.DTO.BookDTO>
 @{
     ViewData["Title"] = "Books list";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@inject IAuthorService authorService
 
 <h2 class="mt-5">Books List</h2>
 <a class="btn btn-warning" asp-action="AddBook">Add book</a>
@@ -13,6 +16,9 @@
             <th scope="col">#</th>
             <th scope="col">Title</th>
             <th scope="col">Year</th>
+            <th scope="col">Author name</th>
+            <th scope="col">Author surname</th>
+            <th scope="col">Rate</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -21,19 +27,23 @@
         @foreach (var book in Model)
         {
             i++;
-            <tr>
-                <th scope="row">@i</th>
-                <td>@book.Title</td>
-                <td>@book.Year</td>
-                <td class="d-flex justify-content-end">
-                    <form asp-action="DeleteBook" asp-route-id="@book.Id" method="post">
-                        <a class="btn btn-sm btn-primary" asp-action="EditBook" asp-route-id="@book.Id">Edit</a>
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Delete
-                        </button>
-                    </form>
-                </td>
-            </tr>
+        <tr>
+            <th scope="row">@i</th>
+            <td>@book.Title</td>
+            <td>@book.Year</td>
+            <td>@authorService.Get(book.AuthorId).Name</td>
+            <td>@authorService.Get(book.AuthorId).Surname</td>
+            <td>@book.Rate</td>
+
+            <td class="d-flex justify-content-end">
+                <form asp-action="DeleteBook" asp-route-id="@book.Id" method="post">
+                    <a class="btn btn-sm btn-primary" asp-action="EditBook" asp-route-id="@book.Id">Edit</a>
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
         }
 
 </table>
