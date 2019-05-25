@@ -13,6 +13,10 @@ using BookLibrary.Models;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Services.Filters;
+using BookLibrary.ViewModels.Sorting.States;
+using BookLibrary.ViewModels.Sorting;
+using BookLibrary.ViewModels.Pagination;
+using BookLibrary.ViewModels.Filtration;
 
 namespace BookLibrary.Controllers
 {
@@ -88,8 +92,6 @@ namespace BookLibrary.Controllers
         [HttpGet]
         public IActionResult EditBook(string id)
         {
-            //ViewBag.Authors = _authorService.GetAll().ToList();
-
             BookDTO getedBook = _bookService.Get(id);
             if (getedBook == null)
             {
@@ -170,7 +172,6 @@ namespace BookLibrary.Controllers
         }
 
         [HttpGet]
-        public IActionResult AuthorsList() => View(_authorService.GetAll().ToList());
 
         [HttpGet]
         public IActionResult AddAuthor()
@@ -258,10 +259,7 @@ namespace BookLibrary.Controllers
                     }
                     newAuthor.Image = imageData;
                 }
-                else
-                {
-                    throw new Exception();
-                }
+                
                 _authorService.Update(newAuthor);
             }
             return RedirectToAction("AuthorsList");
@@ -277,6 +275,76 @@ namespace BookLibrary.Controllers
             _authorService.Remove(id);
             return RedirectToAction("AuthorsList");
         }
+
+        public IActionResult AuthorsList(string searchReq, int page, AuthorsSort sortOrder = AuthorsSort.NAME_ASC)
+        {
+            int pageSize = 10;
+
+            // filtration
+            List<AuthorDTO> Authors = new List<AuthorDTO>();
+            if (string.IsNullOrEmpty(searchReq))
+            {
+                Authors = _authorService.GetAll().ToList();
+            }
+            else
+            {
+                List<AuthorDTO> AllAuthors = _authorService.GetAll().ToList();
+                List<string> keyWords = searchReq.Trim().Split(' ').ToList();
+                for (int i = 0; i < keyWords.Count; i++)
+                {
+                    keyWords[i] = keyWords[i].ToLower().Trim();
+                    foreach (AuthorDTO author in AllAuthors)
+                    {
+                        if (author.Name.ToLower().Contains(keyWords[i]))
+                        {
+                            if (!Authors.Exists(a => a.Id == author.Id))
+                            {
+                                Authors.Add(author);
+                            }
+                        }
+                        if (author.Surname.ToLower().Contains(keyWords[i]))
+                        {
+                            if (!Authors.Exists(a => a.Id == author.Id))
+                            {
+                                Authors.Add(author);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //sorting
+            switch(sortOrder)
+            {
+                case AuthorsSort.NAME_DESC:
+                    Authors = Authors.OrderByDescending(a => a.Name).ToList();
+                    break;
+                case AuthorsSort.SURNAME_ASC:
+                    Authors = Authors.OrderBy(a => a.Surname).ToList();
+                    break;
+                case AuthorsSort.SURNAME_DESC:
+                    Authors = Authors.OrderByDescending(a => a.Surname).ToList();
+                    break;
+                default:
+                    Authors = Authors.OrderBy(a => a.Name).ToList();
+                    break;
+            }
+
+            //pagination
+            int count = Authors.Count;
+            var items = Authors.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            AuthorsListViewModel viewModel = new AuthorsListViewModel
+            {
+                AuthorsFilterVM = new AuthorsFilterViewModel(searchReq),
+                AuthorsPageVM = new PageViewModel(count, page, pageSize),
+                AuthorsSortVM = new AuthorsSortViewModel(sortOrder),
+                Authors = Authors
+            };
+            return View(viewModel);
+        }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

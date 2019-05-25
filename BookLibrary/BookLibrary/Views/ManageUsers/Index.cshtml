@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using Services.Interfaces;
 @using Services.Filters;
+@using System.Linq;
 
 @{
     ViewData["Title"] = "Users list";
@@ -19,6 +20,7 @@
             <th scope="col">#</th>
             <th scope="col">Email</th>
             <th scope="col">Login name</th>
+            <th scope="col">Role</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -32,6 +34,16 @@
                 <th scope="row">@i</th>
                 <td>@user.Email</td>
                 <td>@user.UserName</td>
+                <td>
+                    @if ((await UserManager.GetRolesAsync(user)).Count == 1)
+                    {
+                        foreach (var role in (await UserManager.GetRolesAsync(user)).ToList().First())
+                        {
+                            @role.ToString()
+                        }
+                    }
+                </td>
+
                 <td class="d-flex justify-content-end">
                     @if ((await UserManager.IsInRoleAsync((await UserManager.GetUserAsync(User)), "library admin")) && (await UserManager.IsInRoleAsync((await UserManager.GetUserAsync(User)), "user admin")))
                     {
