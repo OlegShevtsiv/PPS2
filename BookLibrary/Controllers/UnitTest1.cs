@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Services.Tests
+namespace Controllers
 {
     public class UnitTest1
     {

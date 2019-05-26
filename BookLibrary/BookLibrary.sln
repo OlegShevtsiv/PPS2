@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.539
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLibrary", "BookLibrary\BookLibrary.csproj", "{2BC4AE9B-60B7-48D1-A8FF-1CE48914963A}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Tests", "Tests\DataAccess.Tests\DataAccess.Tests.csproj", "{89AA0B4A-E247-4BC2-B0FC-62975D358AD6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "Tests\Services.Tests\Services.Tests.csproj", "{C75B0344-C9FB-45C5-A5C9-38A4CA29AECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLibrary.Tests", "BookLibrary.Tests\BookLibrary.Tests.csproj", "{8BDBC2E3-4384-41F0-9D93-079FA3EC71B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{C75B0344-C9FB-45C5-A5C9-38A4CA29AECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C75B0344-C9FB-45C5-A5C9-38A4CA29AECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C75B0344-C9FB-45C5-A5C9-38A4CA29AECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BDBC2E3-4384-41F0-9D93-079FA3EC71B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BDBC2E3-4384-41F0-9D93-079FA3EC71B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BDBC2E3-4384-41F0-9D93-079FA3EC71B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BDBC2E3-4384-41F0-9D93-079FA3EC71B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{89AA0B4A-E247-4BC2-B0FC-62975D358AD6} = {EFA0FD9E-47E1-4075-AD9F-A226A70B0A07}
 		{C75B0344-C9FB-45C5-A5C9-38A4CA29AECD} = {EFA0FD9E-47E1-4075-AD9F-A226A70B0A07}
+		{8BDBC2E3-4384-41F0-9D93-079FA3EC71B2} = {EFA0FD9E-47E1-4075-AD9F-A226A70B0A07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FDF63E15-1ADF-4F61-9C00-DA4FEA5450F7}
