@@ -8,17 +8,37 @@ namespace BookLibrary.ViewModels.Sorting
 {
     public class AuthorsSortViewModel
     {
-        public AuthorsSort NameSort { get; private set; }
-        public AuthorsSort SurnameSort { get; private set; }
-        public AuthorsSort Current { get; private set; }
-
-        public AuthorsSortViewModel(AuthorsSort sortOrder)
+        public SortEnum NameSort { get; private set; }
+        public SortEnum SurnameSort { get; private set; }
+        public SortEnum Current { get; private set; }
+        public bool Up { get; set; }
+        public AuthorsSortViewModel(SortEnum sortOrder)
         {
-            NameSort = sortOrder == AuthorsSort.NAME_ASC ? AuthorsSort.NAME_DESC : AuthorsSort.NAME_ASC;
-            SurnameSort = sortOrder == AuthorsSort.SURNAME_ASC ? AuthorsSort.SURNAME_DESC : AuthorsSort.SURNAME_ASC;
+            NameSort = sortOrder == SortEnum.NAME_ASC ? SortEnum.NAME_DESC : SortEnum.NAME_ASC;
+            SurnameSort = sortOrder == SortEnum.SURNAME_ASC ? SortEnum.SURNAME_DESC : SortEnum.SURNAME_ASC;
+            
+            Up = true;
 
+            if (sortOrder == SortEnum.NAME_DESC || sortOrder == SortEnum.SURNAME_DESC)
+            {
+                Up = false;
+            }
             Current = sortOrder;
+            //switch (sortOrder)
+            //{
+            //    case SortEnum.NAME_DESC:
+            //        Current = SortEnum.NAME_ASC;
+            //        break;
+            //    case SortEnum.SURNAME_ASC:
+            //        Current = SortEnum.SURNAME_DESC;
+            //        break;
+            //    case SortEnum.SURNAME_DESC:
+            //        Current = SortEnum.SURNAME_ASC;
+            //        break;
+            //    default:
+            //        Current = SortEnum.NAME_DESC;
+            //        break;
+            //}
         }
-
     }
 }

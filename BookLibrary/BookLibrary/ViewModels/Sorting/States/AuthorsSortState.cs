@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.ViewModels.Sorting.States
 {
-    public enum AuthorsSort
+    public enum SortEnum
     {
         NAME_ASC,
         NAME_DESC,

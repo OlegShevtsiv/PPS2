@@ -6,7 +6,7 @@
 <h2 class="mt-5">Author editing</h2>
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="EditAuthor" asp-controller="ManageLibrary" method="post">
+        <form asp-action="EditAuthor" asp-controller="ManageLibrary" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">

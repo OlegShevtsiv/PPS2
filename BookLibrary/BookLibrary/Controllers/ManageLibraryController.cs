@@ -259,7 +259,11 @@ namespace BookLibrary.Controllers
                     }
                     newAuthor.Image = imageData;
                 }
-                
+                else
+                {
+                    return RedirectToAction("Error");
+                }
+
                 _authorService.Update(newAuthor);
             }
             return RedirectToAction("AuthorsList");
@@ -276,9 +280,9 @@ namespace BookLibrary.Controllers
             return RedirectToAction("AuthorsList");
         }
 
-        public IActionResult AuthorsList(string searchReq, int page, AuthorsSort sortOrder = AuthorsSort.NAME_ASC)
+        public IActionResult AuthorsList(string searchReq = "", int page = 1, SortEnum sortOrder = SortEnum.NAME_ASC)
         {
-            int pageSize = 10;
+            int pageSize = 2;
 
             // filtration
             List<AuthorDTO> Authors = new List<AuthorDTO>();
@@ -316,13 +320,13 @@ namespace BookLibrary.Controllers
             //sorting
             switch(sortOrder)
             {
-                case AuthorsSort.NAME_DESC:
+                case SortEnum.NAME_DESC:
                     Authors = Authors.OrderByDescending(a => a.Name).ToList();
                     break;
-                case AuthorsSort.SURNAME_ASC:
+                case SortEnum.SURNAME_ASC:
                     Authors = Authors.OrderBy(a => a.Surname).ToList();
                     break;
-                case AuthorsSort.SURNAME_DESC:
+                case SortEnum.SURNAME_DESC:
                     Authors = Authors.OrderByDescending(a => a.Surname).ToList();
                     break;
                 default:
@@ -339,7 +343,7 @@ namespace BookLibrary.Controllers
                 AuthorsFilterVM = new AuthorsFilterViewModel(searchReq),
                 AuthorsPageVM = new PageViewModel(count, page, pageSize),
                 AuthorsSortVM = new AuthorsSortViewModel(sortOrder),
-                Authors = Authors
+                Authors = items
             };
             return View(viewModel);
         }

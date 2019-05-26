@@ -1,5 +1,5 @@
 ﻿@model BookLibrary.ViewModels.ManageLibrary.AuthorsListViewModel
-@addTagHelper "*, BookLibrary.TagHelpers"
+@addTagHelper "*, BookLibrary"
 @{
     ViewData["Title"] = "Authors list";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,14 +26,46 @@
         <tr>
             <th scope="col">#</th>
             <th>
-                <a asp-action="AuthorsList"
-                   asp-route-sortOrder="@(Model.AuthorsSortVM.SurnameSort)"
-                   asp-route-searchReq="@(Model.AuthorsFilterVM.SearchReq)">Surname</a>
+                @*<a asp-action="AuthorsList"
+                       asp-route-sortOrder="@(Model.AuthorsSortVM.SurnameSort)"
+                       asp-route-searchReq="@(Model.AuthorsFilterVM.SearchReq)">
+                        Surname @if (Model.AuthorsSortVM.Up)
+                        {
+                            <i class="fas fa-chevron-up"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-chevron-down"></i>
+                        }
+                    </a>*@
+
+                <sort-header action="AuthorsList"
+                             up="@Model.AuthorsSortVM.Up"
+                             current="@Model.AuthorsSortVM.Current"
+                             property="@Model.AuthorsSortVM.SurnameSort">
+                    Surname
+                </sort-header>
+
             </th>
             <th>
-                <a asp-action="AuthorsList"
-                   asp-route-sortOrder="@(Model.AuthorsSortVM.NameSort)"
-                   asp-route-searchReq="@(Model.AuthorsFilterVM.SearchReq)">Name</a>
+                <sort-header action="AuthorsList"
+                             up="@Model.AuthorsSortVM.Up"
+                             current="@Model.AuthorsSortVM.Current"
+                             property="@Model.AuthorsSortVM.NameSort">
+                    Name
+                </sort-header>
+                @*<a asp-action="AuthorsList"
+                       asp-route-sortOrder="@(Model.AuthorsSortVM.NameSort)"
+                       asp-route-searchReq="@(Model.AuthorsFilterVM.SearchReq)">
+                        Name @if (Model.AuthorsSortVM.Up)
+                        {
+                            <i class="fas fa-chevron-up"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-chevron-down"></i>
+                        }
+                    </a>*@
             </th>
             <th scope="col"></th>
         </tr>
@@ -59,32 +91,8 @@
         }
 
 </table>
-<page-link page-model="@Model.AuthorsPageVM" 
+<page-link page-model="Model.AuthorsPageVM" 
            page-action="AuthorsList"
            page-url-searchReq="@(Model.AuthorsFilterVM.SearchReq)"
            page-url-sortOrder="@(Model.AuthorsSortVM.Current)">
-
 </page-link>
-
-@*@if (Model.AuthorsPageVM.HasPreviousPage)
-    {
-        <a asp-action="AuthorsList"
-           asp-route-page="@(Model.AuthorsPageVM.PageNumber - 1)"
-           asp-route-searchReq="@(Model.AuthorsFilterVM.SearchReq)"
-           asp-route-sortOrder="@(Model.AuthorsSortVM.Current)"
-           class="btn btn-default btn">
-            <i class="fas fa-chevron-left"></i>
-            Prev
-        </a>
-    }
-    @if (Model.AuthorsPageVM.HasNextPage)
-    {
-        <a asp-action="AuthorsList"
-           asp-route-page="@(Model.AuthorsPageVM.PageNumber + 1)"
-           asp-route-searchReq="@(Model.AuthorsFilterVM.SearchReq)"
-           asp-route-sortOrder="@(Model.AuthorsSortVM.Current)"
-           class="btn btn-default btn">
-            Next
-            <i class="fas fa-chevron-right"></i>
-        </a>
-    }*@
