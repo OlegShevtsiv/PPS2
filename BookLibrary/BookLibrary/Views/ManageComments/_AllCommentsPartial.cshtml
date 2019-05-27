@@ -126,7 +126,7 @@
                     </form>
                 </div>
                 <div class="col-lg-1">
-                    <a type="submit" class="btn btn-sm btn-warning" asp-action="BlockUser" asp-controller="ManageUsers" asp-route-UserId="@c.OwnerId" asp-route-EssenceId="@Model.EssenceId" asp-route-isBook="@Model.IsBook">Block User</a>
+                    <a class="btn btn-sm btn-warning" asp-action="BlockUser" asp-controller="ManageUsers" asp-route-UserId="@c.OwnerId" asp-route-EssenceId="@Model.EssenceId" asp-route-isBook="@Model.IsBook">Block User</a>
                 </div>
             </div>
         }
@@ -175,9 +175,7 @@
                 </form>
             </div>
             <div class="col-lg-1">
-                <a type="submit" class="btn btn-sm btn-warning" asp-action="BlockUser" asp-controller="ManageUsers" asp-route-UserId="@c.OwnerId" asp-route-EssenceId="@Model.EssenceId" asp-route-isBook=@Model.IsBook>Block User</a>
-
-                @*<a type="submit" class="btn btn-sm btn-warning" asp-action="BlockUser" asp-controller="ManageUsers" asp-route-comment=@{new CommentViewModel { EssenceId = Model.EssenceId, OwnerId = c.OwnerId, IsBook = Model.IsBook };}>Block User</a>*@
+                <a class="btn btn-sm btn-warning" asp-action="BlockUser" asp-controller="ManageUsers" asp-route-UserId="@c.OwnerId" asp-route-EssenceId="@Model.EssenceId" asp-route-isBook=@Model.IsBook>Block User</a>
             </div>
         </div>
 

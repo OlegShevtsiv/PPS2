@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Services.Filters;
 using Services.DTO;
+using BookLibrary.ViewModels.Sorting.States;
+using BookLibrary.ViewModels.Filtration;
+using BookLibrary.ViewModels.Pagination;
+using BookLibrary.ViewModels.Sorting;
 
 namespace BookLibrary.Controllers
 {
@@ -29,8 +33,78 @@ namespace BookLibrary.Controllers
             _blockedUserService = blockedUserService;
         }
 
+        //[HttpGet]
+        //public IActionResult Index() => View();
         [HttpGet]
-        public IActionResult Index() => View();
+        public IActionResult Index(string searchReq = "", int page = 1, SortEnum sortOrder = SortEnum.LOGINNAME_ASC)
+        {
+            int pageSize = 2;
+
+            // filtration
+            List<IdentityUser> Users = new List<IdentityUser>();
+            if (string.IsNullOrEmpty(searchReq))
+            {
+                Users = _userManager.Users.ToList();
+            }
+            else
+            {
+                List<string> keyWords = searchReq.Trim().Split(' ').ToList();
+                List<IdentityUser> allUsers = _userManager.Users.ToList();
+                for (int i = 0; i < keyWords.Count; i++)
+                {
+                    keyWords[i] = keyWords[i].ToLower().Trim();
+                    foreach (var user in allUsers)
+                    {
+                        if (user.Email.ToLower().Contains(keyWords[i]))
+                        {
+                            if (!Users.Exists(b => b.Id == user.Id))
+                            {
+                                Users.Add(user);
+                            }
+                        }
+                        if (user.UserName.ToLower().Contains(keyWords[i]))
+                        {
+                            if (!Users.Exists(b => b.Id == user.Id))
+                            {
+                                Users.Add(user);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //sorting
+            switch (sortOrder)
+            {
+                case SortEnum.LOGINNAME_DESC:
+                    Users = Users.OrderByDescending(a => a.UserName).ToList();
+                    break;
+                case SortEnum.EMAIL_ASC:
+                    Users = Users.OrderBy(a => a.Email).ToList();
+                    break;
+                case SortEnum.EMAIL_DESC:
+                    Users = Users.OrderByDescending(a => a.Email).ToList();
+                    break;
+                default:
+                    Users = Users.OrderBy(a => a.UserName).ToList();
+                    break;
+            }
+
+            //pagination
+            int count = Users.Count;
+            var items = Users.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            UsersListViewModel viewModel = new UsersListViewModel
+            {
+                UsersFilterVM = new UsersFilterViewModel(searchReq),
+                UsersPageVM = new PageViewModel(count, page, pageSize),
+                UsersSortVM = new UsersSortViewModel(sortOrder),
+                Users = items
+            };
+            return View(viewModel);
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
@@ -180,6 +254,9 @@ namespace BookLibrary.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

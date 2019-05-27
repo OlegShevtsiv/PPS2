@@ -2,7 +2,8 @@
 @using Services.Interfaces;
 @using Services.Filters;
 @using System.Linq;
-
+@model BookLibrary.ViewModels.ManageUsers.UsersListViewModel
+@addTagHelper "*, BookLibrary"
 @{
     ViewData["Title"] = "Users list";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,27 +14,56 @@
 
 
 <h2 class="mt-5">Users List</h2>
-
+<form method="get">
+    <div class="d-flex">
+        <div class="col-lg-6 mt-5">
+            <div class="col-lg-11 p-0">
+                @Html.TextBox("searchReq", Model.UsersFilterVM.SearchReq, htmlAttributes: new { @class = "form-control border-primary w-100 h1 my-0 form-control-lg", @placeholder = "Search book" })
+            </div>
+            <div class="col-lg-1 p-0">
+                <button type="submit" class="btn btn-primary my-0 form-control-lg"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </div>
+</form>
 <table class="table mt-5">
     <thead class="thead-light">
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Email</th>
-            <th scope="col">Login name</th>
+            <th>
+                <sort-header action="Index"
+                             up="@Model.UsersSortVM.Up"
+                             current="@Model.UsersSortVM.Current"
+                             property="@Model.UsersSortVM.LoginNameSort"
+                             page-url-searchReq="@(Model.UsersFilterVM.SearchReq)">
+                    Login name
+                </sort-header>
+
+            </th>
+            <th>
+                <sort-header action="Index"
+                             up="@Model.UsersSortVM.Up"
+                             current="@Model.UsersSortVM.Current"
+                             property="@Model.UsersSortVM.EmailSort"
+                             page-url-searchReq="@(Model.UsersFilterVM.SearchReq)">
+                    Emil
+                </sort-header>
+
+            </th>
             <th scope="col">Role</th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         @{ int i = 0;}
-        @foreach (var user in UserManager.Users)
+        @foreach (var user in Model.Users)
         {
             bool isBlocked = _blockedUserService.Get(new BlockedUserFilterByUserId { UserId = user.Id }).Any();
             i++;
             <tr>
                 <th scope="row">@i</th>
-                <td>@user.Email</td>
                 <td>@user.UserName</td>
+                <td>@user.Email</td>
                 <td>
                     @if ((await UserManager.GetRolesAsync(user)).Count == 1)
                     {
@@ -77,3 +107,8 @@
         }
     </tbody>
 </table>
+<page-link page-model="Model.UsersPageVM"
+           page-action="Index"
+           page-url-searchReq="@(Model.UsersFilterVM.SearchReq)"
+           page-url-sortOrder="@(Model.UsersSortVM.Current)">
+</page-link>

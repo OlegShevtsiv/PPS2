@@ -36,7 +36,105 @@ namespace BookLibrary.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index() => View(_bookService.GetAll().ToList().OrderByDescending(b => b.Rate));
+        public IActionResult Index(string searchReq = "", int page = 1, SortEnum sortOrder = SortEnum.TITLE_ASC)
+        {
+            int pageSize = 2;
+
+            // filtration
+            List<BookDTO> Books = new List<BookDTO>();
+            if (string.IsNullOrEmpty(searchReq))
+            {
+                Books = _bookService.GetAll().ToList();
+            }
+            else
+            {
+                List<string> keyWords = searchReq.Trim().Split(' ').ToList();
+                List<BookDTO> allBooks = _bookService.GetAll().ToList();
+                for (int i = 0; i < keyWords.Count; i++)
+                {
+                    keyWords[i] = keyWords[i].ToLower().Trim();
+                    foreach (BookDTO book in allBooks)
+                    {
+                        if (book.Title.ToLower().Contains(keyWords[i]))
+                        {
+                            if (!Books.Exists(b => b.Id == book.Id))
+                            {
+                                Books.Add(book);
+                            }
+                        }
+                        if (book.Year.ToString() == keyWords[i])
+                        {
+                            if (!Books.Exists(b => b.Id == book.Id))
+                            {
+                                Books.Add(book);
+                            }
+                        }
+                        if (_authorService.Get(book.AuthorId).Name.ToLower() == keyWords[i])
+                        {
+                            if (!Books.Exists(b => b.Id == book.Id))
+                            {
+                                Books.Add(book);
+                            }
+                        }
+                        if (_authorService.Get(book.AuthorId).Surname.ToLower() == keyWords[i])
+                        {
+                            if (!Books.Exists(b => b.Id == book.Id))
+                            {
+                                Books.Add(book);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //sorting
+            switch (sortOrder)
+            {
+                case SortEnum.TITLE_DESC:
+                    Books = Books.OrderByDescending(a => a.Title).ToList();
+                    break;
+                case SortEnum.YEAR_ASC:
+                    Books = Books.OrderBy(a => a.Year).ToList();
+                    break;
+                case SortEnum.YEAR_DESC:
+                    Books = Books.OrderByDescending(a => a.Year).ToList();
+                    break;
+                case SortEnum.AUTHOR_NAME_ASC:
+                    Books = Books.OrderBy(a => _authorService.Get(a.AuthorId).Name).ToList();
+                    break;
+                case SortEnum.AUTHOR_NAME_DESC:
+                    Books = Books.OrderByDescending(a => _authorService.Get(a.AuthorId).Name).ToList();
+                    break;
+                case SortEnum.AUTHOR_SURNAME_ASC:
+                    Books = Books.OrderBy(a => _authorService.Get(a.AuthorId).Surname).ToList();
+                    break;
+                case SortEnum.AUTHOR_SURNAME_DESC:
+                    Books = Books.OrderByDescending(a => _authorService.Get(a.AuthorId).Surname).ToList();
+                    break;
+                case SortEnum.RATE_ASC:
+                    Books = Books.OrderBy(a => a.Rate).ToList();
+                    break;
+                case SortEnum.RATE_DESC:
+                    Books = Books.OrderByDescending(a => a.Rate).ToList();
+                    break;
+                default:
+                    Books = Books.OrderBy(a => a.Title).ToList();
+                    break;
+            }
+
+            //pagination
+            int count = Books.Count;
+            var items = Books.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            BooksListViewModel viewModel = new BooksListViewModel
+            {
+                BooksFilterVM = new BooksFilterViewModel(searchReq),
+                BooksPageVM = new PageViewModel(count, page, pageSize),
+                BooksSortVM = new BooksSortViewModel(sortOrder),
+                Books = items
+            };
+            return View(viewModel);
+        }
 
         [HttpGet]
         public IActionResult AddBook()

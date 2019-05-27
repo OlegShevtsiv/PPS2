@@ -24,21 +24,6 @@ namespace BookLibrary.ViewModels.Sorting
                 Up = false;
             }
             Current = sortOrder;
-            //switch (sortOrder)
-            //{
-            //    case SortEnum.NAME_DESC:
-            //        Current = SortEnum.NAME_ASC;
-            //        break;
-            //    case SortEnum.SURNAME_ASC:
-            //        Current = SortEnum.SURNAME_DESC;
-            //        break;
-            //    case SortEnum.SURNAME_DESC:
-            //        Current = SortEnum.SURNAME_ASC;
-            //        break;
-            //    default:
-            //        Current = SortEnum.NAME_DESC;
-            //        break;
-            //}
         }
     }
 }

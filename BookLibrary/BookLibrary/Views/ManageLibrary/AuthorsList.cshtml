@@ -26,23 +26,11 @@
         <tr>
             <th scope="col">#</th>
             <th>
-                @*<a asp-action="AuthorsList"
-                       asp-route-sortOrder="@(Model.AuthorsSortVM.SurnameSort)"
-                       asp-route-searchReq="@(Model.AuthorsFilterVM.SearchReq)">
-                        Surname @if (Model.AuthorsSortVM.Up)
-                        {
-                            <i class="fas fa-chevron-up"></i>
-                        }
-                        else
-                        {
-                            <i class="fas fa-chevron-down"></i>
-                        }
-                    </a>*@
-
                 <sort-header action="AuthorsList"
                              up="@Model.AuthorsSortVM.Up"
                              current="@Model.AuthorsSortVM.Current"
-                             property="@Model.AuthorsSortVM.SurnameSort">
+                             property="@Model.AuthorsSortVM.SurnameSort"
+                             page-url-searchReq="@(Model.AuthorsFilterVM.SearchReq)">
                     Surname
                 </sort-header>
 
@@ -51,21 +39,10 @@
                 <sort-header action="AuthorsList"
                              up="@Model.AuthorsSortVM.Up"
                              current="@Model.AuthorsSortVM.Current"
-                             property="@Model.AuthorsSortVM.NameSort">
+                             property="@Model.AuthorsSortVM.NameSort"
+                             page-url-searchReq="@(Model.AuthorsFilterVM.SearchReq)">
                     Name
                 </sort-header>
-                @*<a asp-action="AuthorsList"
-                       asp-route-sortOrder="@(Model.AuthorsSortVM.NameSort)"
-                       asp-route-searchReq="@(Model.AuthorsFilterVM.SearchReq)">
-                        Name @if (Model.AuthorsSortVM.Up)
-                        {
-                            <i class="fas fa-chevron-up"></i>
-                        }
-                        else
-                        {
-                            <i class="fas fa-chevron-down"></i>
-                        }
-                    </a>*@
             </th>
             <th scope="col"></th>
         </tr>
