@@ -38,7 +38,7 @@ namespace BookLibrary.Controllers
         [HttpGet]
         public IActionResult Index(string searchReq = "", int page = 1, SortEnum sortOrder = SortEnum.LOGINNAME_ASC)
         {
-            int pageSize = 2;
+            int pageSize = 3;
 
             // filtration
             List<IdentityUser> Users = new List<IdentityUser>();

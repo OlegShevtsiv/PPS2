@@ -74,9 +74,7 @@
         {
             <div class="col-lg-11">
                 <p><ins style="color:black">@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins>  <em style="color:dimgrey">@c.Time</em></p>
-                <div class="form-group">
-                    <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
-                </div>
+                <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
             </div>
         }
         else if ((await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "user admin")))
@@ -105,9 +103,7 @@
                     <p style="color:dimgrey"><ins>@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> <em>@c.Time</em></p>
                 }
                 <div class="col-lg-10">
-                    <div class="form-group">
-                        <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
-                    </div>
+                    <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
                 </div>
                 <div class="col-lg-1">
                     <form asp-action="DeleteComment" asp-controller="ManageComments" method="post">
@@ -154,9 +150,7 @@
                 <p style="color:dimgrey"><ins>@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> <em>@c.Time</em></p>
             }
             <div class="col-lg-10">
-                <div class="form-group">
-                    <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
-                </div>
+                 <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
             </div>
             <div class="col-lg-1">
                 <form asp-action="DeleteComment" asp-controller="ManageComments" method="post">
@@ -185,20 +179,18 @@
         @if ((await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "user admin")) ||
         (await userManager.IsInRoleAsync((userManager.Users.First(u => u.Id == c.OwnerId)), "library admin")))
         {
-            <div class="col-lg-11">
+            <div class="col-lg-12">
                 <p style="color: red"><ins style="color:black">@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> Admin <em style="color:dimgrey">@c.Time</em></p>
             </div>
         }
         else
         {
-            <div class="col-lg-11">
+            <div class="col-lg-12">
                 <p style="color:dimgrey"><ins>@((userManager.Users.First(u => u.Id == c.OwnerId)).UserName)</ins> <em>@c.Time</em></p>
             </div>
         }
-        <div class="col-lg-11">
-            <div class="form-group">
-                <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
-            </div>
+        <div class="col-lg-12">
+             <p class="h5 text-secondary border px-3 py-2 rounded">@c.Text</p>
         </div>
     }
 
