@@ -74,7 +74,7 @@ namespace Services.Interfaces
 
             Author entity = MapToEntity(dto);
             Repository.Add(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         public override void Remove(string id)
@@ -89,7 +89,7 @@ namespace Services.Interfaces
             }
 
             Repository.Remove(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
         public override void Update(AuthorDTO dto)
         {
@@ -108,7 +108,7 @@ namespace Services.Interfaces
             entity.Image = dto.Image;
 
             Repository.Update(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         protected override AuthorDTO MapToDto(Author entity)

@@ -75,7 +75,7 @@ namespace Services.Interfaces
 
             Rate entity = MapToEntity(dto);
             Repository.Add(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         public override void Remove(string id)
@@ -90,7 +90,7 @@ namespace Services.Interfaces
             }
 
             Repository.Remove(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
         public override void Update(RateDTO dto)
         {
@@ -108,7 +108,7 @@ namespace Services.Interfaces
             entity.Value = dto.Value;
 
             Repository.Update(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         protected override RateDTO MapToDto(Rate entity)

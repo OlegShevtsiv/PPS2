@@ -77,7 +77,7 @@ namespace Services.Interfaces
 
             Book entity = MapToEntity(dto);
             Repository.Add(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         public override void Remove(string id)
@@ -92,7 +92,7 @@ namespace Services.Interfaces
             }
 
             Repository.Remove(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
         public override void Update(BookDTO dto)
         {
@@ -116,7 +116,7 @@ namespace Services.Interfaces
             entity.RatesAmount = dto.RatesAmount;
         
             Repository.Update(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         protected override BookDTO MapToDto(Book entity)

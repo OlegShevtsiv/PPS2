@@ -74,7 +74,7 @@ namespace Services.Interfaces
 
             BlockedUser entity = MapToEntity(dto);
             Repository.Add(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         public override void Remove(string id)
@@ -89,7 +89,7 @@ namespace Services.Interfaces
             }
 
             Repository.Remove(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
         public override void Update(BlockedUserDTO dto)
         {
@@ -105,7 +105,7 @@ namespace Services.Interfaces
             entity.UserId = dto.UserId;
 
             Repository.Update(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         protected override BlockedUserDTO MapToDto(BlockedUser entity)

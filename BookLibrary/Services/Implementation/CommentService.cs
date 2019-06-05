@@ -74,7 +74,7 @@ namespace Services.Interfaces
 
             Comment entity = MapToEntity(dto);
             Repository.Add(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         public override void Remove(string id)
@@ -89,7 +89,7 @@ namespace Services.Interfaces
             }
 
             Repository.Remove(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
         public override void Update(CommentDTO dto)
         {
@@ -108,7 +108,7 @@ namespace Services.Interfaces
             entity.Time = dto.Time;
 
             Repository.Update(entity);
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         protected override CommentDTO MapToDto(Comment entity)
