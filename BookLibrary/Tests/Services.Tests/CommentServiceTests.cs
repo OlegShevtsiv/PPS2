@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Services.Tests
 {
-    class CommentServiceTests
+    public class CommentServiceTests
     {
         private readonly List<Comment> _comments;
 
@@ -26,6 +26,26 @@ namespace Services.Tests
                 new Comment { Id = "id2", CommentedEssenceId = "ceId2", Time = new DateTime(2019, 02, 02), Text = _text},
                 new Comment { Id = "id3", CommentedEssenceId = "ceId3", Time = new DateTime(2019, 03, 03), Text = _text}
             };
+        }
+
+        [Fact]
+        public void GetByFilterTest()
+        {
+            //Arange
+            Mock<IUnitOfWork> unitOfWorkMock = new Mock<IUnitOfWork>();
+            Mock<IRepository<Comment>> repositoryMock = new Mock<IRepository<Comment>>();
+            repositoryMock.Setup(repo => repo.Get(It.IsAny<Expression<Func<Comment, bool>>>())).Returns(_comments.AsQueryable);
+            unitOfWorkMock.Setup(getRepo => getRepo.GetRepository<Comment>()).Returns(repositoryMock.Object);
+            CommentService _commentService = new CommentService(unitOfWorkMock.Object);
+            CommentFilter _commentFilter = new CommentFilter();
+
+            //Act
+            IEnumerable<CommentDTO> _commentsDto = _commentService.Get(_commentFilter);
+
+            //Assert
+            Assert.NotNull(_commentsDto);
+            Assert.NotEmpty(_commentsDto);
+            Assert.Equal(3, _commentsDto.Count());
         }
     }
 }
