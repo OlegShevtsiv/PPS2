@@ -47,5 +47,25 @@ namespace Services.Tests
             Assert.NotEmpty(_commentsDto);
             Assert.Equal(3, _commentsDto.Count());
         }
+
+        [Fact]
+
+        public void GetAllTest()
+        {
+            //Arange
+            Mock<IUnitOfWork> unitOfWorkMock = new Mock<IUnitOfWork>();
+            Mock < IRepository <Comment>> repositoryMock = new Mock<IRepository<Comment>>();
+            repositoryMock.Setup(repo => repo.Get(It.IsAny<Expression<Func<Comment, bool>>>())).Returns(_comments.AsQueryable);
+            unitOfWorkMock.Setup(getRepo => getRepo.GetRepository<Comment>()).Returns(repositoryMock.Object);
+            CommentService _commentService = new CommentService(unitOfWorkMock.Object);
+
+            //Act
+            IEnumerable<CommentDTO> _commentsDto = _commentService.GetAll();
+
+            //Assert
+            Assert.NotNull(_commentsDto);
+            Assert.NotEmpty(_commentsDto);
+            Assert.Equal(3, _commentsDto.Count());
+        }
     }
 }
