@@ -20,9 +20,9 @@ namespace Services.Tests
         {
             _books = new List<Book>
             {
-                new Book { Id = "b1", Title = "First", AuthorId = "a1", Year = 2019, Genre = "g1", Description = "d1", Rate = 1, RatesAmount = 11 },
-                new Book { Id = "b2", Title = "Second", AuthorId = "a2", Year = 2019, Genre = "g2", Description = "d2", Rate = 2, RatesAmount = 22 },
-                new Book { Id = "b3", Title = "Third", AuthorId = "a3", Year = 2019, Genre = "g3", Description = "d3", Rate = 3, RatesAmount = 33 }
+                new Book { Id = "b1", Title = "First", AuthorId = "a1"},
+                new Book { Id = "b2", Title = "Second", AuthorId = "a2"},
+                new Book { Id = "b3", Title = "Third", AuthorId = "a3"}
             };
         }
 

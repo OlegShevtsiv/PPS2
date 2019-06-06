@@ -15,14 +15,12 @@ namespace BookLibrary.Controllers
     {
         private readonly IBookService _bookService;
         private readonly IAuthorService _authorService;
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly IRateService _rateService;
 
-        public HomeController(IBookService bookService, IAuthorService authorService, UserManager<IdentityUser> userManager, IRateService rateService)
+        public HomeController(IBookService bookService, IAuthorService authorService, IRateService rateService)
         {
             _bookService = bookService;
             _authorService = authorService;
-            _userManager = userManager;
             _rateService = rateService;
         }
 
