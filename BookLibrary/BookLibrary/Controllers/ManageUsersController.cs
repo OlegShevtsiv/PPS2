@@ -247,15 +247,13 @@ namespace BookLibrary.Controllers
         {
             if (string.IsNullOrEmpty(UserId))
             {
-                RedirectToAction("Error");
+                return RedirectToAction("Error");
             }
             string id = _blockedUserService.GetAll().First(u => u.UserId == UserId).Id;
             _blockedUserService.Remove(id);
 
             return RedirectToAction("Index");
         }
-
-
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
