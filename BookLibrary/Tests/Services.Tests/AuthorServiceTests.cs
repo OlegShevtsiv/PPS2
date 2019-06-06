@@ -50,6 +50,7 @@ namespace Services.Tests
 
         }
 
+        [Fact]
         public void GetAllTest()
         {
             //Arange
