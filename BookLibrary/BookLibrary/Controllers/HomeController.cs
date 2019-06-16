@@ -91,7 +91,7 @@ namespace BookLibrary.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                RedirectToAction("Error");
+                return RedirectToAction("Error");
             }
             AuthorDTO currentAuthor = _authorService.Get(id);
             if (currentAuthor == null)
@@ -106,7 +106,7 @@ namespace BookLibrary.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                RedirectToAction("Error");
+                return RedirectToAction("Error");
             }
             BookDTO currentBook = _bookService.Get(id);
             if (currentBook == null)
@@ -141,7 +141,7 @@ namespace BookLibrary.Controllers
         {
             if (string.IsNullOrEmpty(rateVM.UserId) || string.IsNullOrEmpty(rateVM.RatedEssenceId) || rateVM.Value < 1 || rateVM.Value > 5)
             {
-                RedirectToAction("Error");
+                return RedirectToAction("Error");
             }
             BookDTO bookTORate = _bookService.Get(rateVM.RatedEssenceId);
             if (bookTORate == null)

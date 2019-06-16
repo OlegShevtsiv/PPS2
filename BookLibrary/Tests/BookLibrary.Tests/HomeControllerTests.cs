@@ -89,22 +89,34 @@ namespace BookLibrary.Tests
 
             HomeController controller = new HomeController(BookServiceMoq.Object, AuthorServiceMoq.Object, RateServiceMoq.Object);
 
-            // Assert
-            controller.ControllerContext = new ControllerContext
-            {
-                HttpContext = new DefaultHttpContext
-                {
-                    User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(ClaimTypes.Name, "Test")
-                    }))
-                }
-            };
-
             // Act
             RedirectToActionResult result = (RedirectToActionResult)controller.Search("");
+            //Assert
             var viewResult = Assert.IsType<RedirectToActionResult>(result);
         }
+
+        [Fact]
+        public void RateBookTest()
+        {
+            //Arrange
+            var BookServiceMoq = new Mock<IBookService>();
+            var AuthorServiceMoq = new Mock<IAuthorService>();
+            var RateServiceMoq = new Mock<IRateService>();
+
+            BookServiceMoq.Setup(service => service.GetAll()).Returns(_books.AsQueryable);
+            AuthorServiceMoq.Setup(service => service.GetAll()).Returns(_authors.AsQueryable);
+            RateServiceMoq.Setup(service => service.GetAll()).Returns(_rates.AsQueryable);
+
+            HomeController controller = new HomeController(BookServiceMoq.Object, AuthorServiceMoq.Object, RateServiceMoq.Object);
+            //Act
+
+            RedirectToActionResult result1 = (RedirectToActionResult)controller.RateBook(new ViewModels.Home.RateViewModel { UserId = "u1", RatedEssenceId = "b1", Value = 1 });
+            //Assert
+
+            var viewResult1 = Assert.IsType<RedirectToActionResult>(result1);
+        }
+
+
 
 
 
